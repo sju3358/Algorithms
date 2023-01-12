@@ -65,6 +65,7 @@ public class Main {
 	
 	public static boolean checkNumber(int number, int[][] bingo, boolean[][] map) {
 		
+		//맵에 체크
 		for(int i = 0; i < 5; i++)
 			for(int j = 0; j < 5; j++)
 				if(bingo[i][j] == number) {
@@ -72,6 +73,7 @@ public class Main {
 				}
 		
 		
+		//가로 세로 대각선 빙고 여부 확인
 		if(checkRow(map) + checkColumn(map) + checkDiagnal(map) >= 3)
 			return true;
 		else
@@ -81,6 +83,7 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
+		//초기화 및 입력
 		int[][] bingo = new int[5][5];
 		boolean[][] map = new boolean[5][5];
 		
@@ -91,6 +94,8 @@ public class Main {
 			}
 		}
 		
+		
+		//사회자가 하나씩 불러줄때마다 번호 체크
 		for(int i = 0; i <  25; i++) {
 			int number = sc.nextInt();
 			
