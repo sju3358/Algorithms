@@ -1,35 +1,48 @@
-#include <string>
+#include <iostream>
+#include <algorithm>
 #include <vector>
-
+#include <queue>
+#include <string>
+#include <stack>
 using namespace std;
 
 vector<int> solution(int brown, int yellow) {
+
     vector<int> answer;
-    
-    int row, col;
-    
-    for(int i = 1; i<= yellow; i++)
+
+    for(int i = 1; i*i <= yellow ; i++)
     {
-        if(yellow % i == 0)
-        {
-            int temp1 = i;
-            int temp2 = yellow / i;
-            
-            int flag = 4 + temp1*2 + temp2*2;
-            
-            if(flag == brown)
-            {
-                row = temp1 > temp2 ? temp1 : temp2;
-                col = temp1 > temp2 ? temp2 : temp1;
-                row += 2;
-                col += 2;
+        if(yellow % i == 0) { // yellow 타일의 개수를 소인수분해 하여 따져본다.
+
+            int heightOfYellow = i;
+            int widthOfBrown = yellow / i;
+
+            int sumOfBrown = 4 + heightOfYellow * 2 + widthOfBrown * 2;
+
+            if (sumOfBrown == brown) {
+                //i*i <= yellow 일때까지만 비교하므로 항상 heightOfYellow <= widthOfBrown
+                answer.push_back(widthOfBrown + 2);
+                answer.push_back(heightOfYellow + 2);
                 break;
             }
-            
+
         }
     }
-    answer.push_back(row);
-    answer.push_back(col);
-    
+
+
     return answer;
 }
+
+// int main(){
+//     for(int sol : solution(10,2))
+//         cout << sol << " ";
+//     cout << endl;
+
+//     for(int sol : solution(8,1))
+//         cout << sol << " ";
+//     cout << endl;
+
+//     for(int sol : solution(24,24))
+//         cout << sol << " ";
+//     cout << endl;
+// }
