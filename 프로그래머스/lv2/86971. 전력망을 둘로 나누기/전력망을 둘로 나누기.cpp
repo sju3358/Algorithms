@@ -24,23 +24,23 @@ vector<vector<bool>>  initMap(int n) {
 }
 
 
-void dfs(queue<int> dfsQueue, vector<vector<bool>> map, vector<bool>& isVisited, int& length) {
+void bfs(queue<int> bfsQueue, vector<vector<bool>> map, vector<bool>& isVisited, int& length) {
 
-	if (dfsQueue.empty() == true)
+	if (bfsQueue.empty() == true)
 		return;
 	else {
-		int curNode = dfsQueue.front();
-		dfsQueue.pop();
+		int curNode = bfsQueue.front();
+		bfsQueue.pop();
 		
 		for (int i = 0; i < map.size(); i++) {
 			if (map[curNode][i] == true && isVisited[i] != true) {
 				isVisited[i] = true;
-				dfsQueue.push(i);
+				bfsQueue.push(i);
 				length++;
 			}
 		}
 
-		dfs(dfsQueue, map, isVisited, length);
+		bfs(bfsQueue, map, isVisited, length);
 	}
 
 }
@@ -53,15 +53,15 @@ int getAbs(vector<vector<bool>> map,int xNode, int yNode) {
 	for (int i = 0; i < map.size(); i++)
 		isVisited.push_back(false);
 
-	queue<int> dfsQueue;
+	queue<int> bfsQueue;
 	
-	dfsQueue.push(xNode); isVisited[xNode] = true;
+	bfsQueue.push(xNode); isVisited[xNode] = true;
 	int sizeOfX = 0;
-	dfs(dfsQueue, map, isVisited, sizeOfX);
+	bfs(bfsQueue, map, isVisited, sizeOfX);
 	
-	dfsQueue.push(yNode); isVisited[yNode] = true;
+	bfsQueue.push(yNode); isVisited[yNode] = true;
 	int sizeOfY = 0;
-	dfs(dfsQueue, map, isVisited, sizeOfY);
+	bfs(bfsQueue, map, isVisited, sizeOfY);
 
 	return sizeOfX > sizeOfY ? sizeOfX - sizeOfY : sizeOfY - sizeOfX;
 	
