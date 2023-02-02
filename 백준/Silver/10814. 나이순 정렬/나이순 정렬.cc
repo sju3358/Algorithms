@@ -36,7 +36,7 @@ int main(void) {
 	stable_sort(list.begin(), list.end(), compare);
 
 	for (Person p : list)
-		cout << p.age << " " << p.name << "\n";
+		cout << p.age << " " << p.name << "\n"; //endl 쓰면 시간초과
 
 	
 }
