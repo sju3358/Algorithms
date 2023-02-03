@@ -6,15 +6,6 @@ using namespace std;
 
 
 bool compare(string a, string b) {
-
-	for (int i = 0; i < min(a.length(), b.length());i++)
-		if (a[i] == b[i])
-			continue;
-		else
-			return a[i] > b[i];
-
-	if (a.length() == b.length())
-		return false;
 	
 	int targetA = stoi(a + b);
 	int targetB = stoi(b + a);
