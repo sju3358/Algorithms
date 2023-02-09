@@ -11,9 +11,6 @@ public class Main {
 	static int[] sourIngredients;
 	static int[] bitterIngredients;
 	
-	static int sizeOfSelectedsourIngredeints = 0;
-	static int sizeOfSelectedbitterIngredients = 0;
-	
 	static int N;
 	
 	
