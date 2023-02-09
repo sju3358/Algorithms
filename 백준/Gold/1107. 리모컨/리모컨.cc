@@ -5,6 +5,8 @@
 #include <algorithm>
 using namespace std;
 
+
+int cost1 = 0;
 int cost2 = 500001;
 
 
@@ -12,7 +14,6 @@ int cost2 = 500001;
 int getABS(int a, int b) {
 	return a > b ? a - b : b - a;
 }
-
 
 int getLength(int n) {
 	if (n == 0)
@@ -84,6 +85,8 @@ void getCostLonger(int curChannel, int targetChannel, vector<int> usableButtons)
 
 void getCostShorter(int curChannel, int targetChannel, vector<int> usableButtons) {
 
+	sort(usableButtons.rbegin(), usableButtons.rend());
+
 	if (getLength(targetChannel) == 1)
 		return;
 
@@ -113,63 +116,81 @@ void getCostShorter(int curChannel, int targetChannel, vector<int> usableButtons
 
 }
 
+bool isInUsableButtons(int targetButton, vector<int> usableButtons) {
+	
+	for (int i = 0; i < usableButtons.size(); i++)
+		if (usableButtons[i] == targetButton)
+			return true;
+	return false;
+}
+
+bool isInbrokenButtons(int targetButton, vector<int> brokenButtons) {
+
+	for (int i = 0; i < brokenButtons.size(); i++)
+		if (brokenButtons[i] == targetButton)
+			return true;
+	return false;
+}
+
+bool canMakeChannelWithButtons(int targetChannel, vector<int> usableButtons) {
+	while (targetChannel) {
+		if (isInUsableButtons(targetChannel % 10, usableButtons) == false)
+			return false;
+
+		targetChannel = targetChannel / 10;
+	}
+	return true;
+
+}
+
+void getCost1(int targetChannel) {
+	cost1 = getABS(targetChannel, 100);
+}
+
+void getCost2(int targetChannel, vector<int> usableButtons) {
+	
+
+	if (targetChannel != 0 && canMakeChannelWithButtons(targetChannel, usableButtons)) {
+		cost2 = getLength(targetChannel);
+	}
+	else if (usableButtons.size() > 0) {
+		getCost("", to_string(targetChannel), usableButtons);
+		getCostLonger(0, targetChannel, usableButtons);
+		getCostShorter(0, targetChannel, usableButtons);
+	}
+}
+
 
 int main(void) {
 
-	bool test = false;
-	do{
-
-		int curChannel = 100;
 		int targetChannel;
 		vector<int> usableButtons;
-		vector<int> rusableButtons;
-		set<int> brokenButtons;
+		vector<int> brokenButtons;
 
 		cin >> targetChannel;
 		int n; cin >> n;
 
 		for (int i = 0; i < n; i++) {
 			int brokenBuuton; cin >> brokenBuuton;
-			brokenButtons.insert(brokenBuuton);
+			brokenButtons.push_back(brokenBuuton);
 		}
+		sort(brokenButtons.begin(), brokenButtons.end());
 
-		for (int i = 0; i <= 9; i++) {
-			set<int>::iterator isBroken = brokenButtons.find(i);
-			if (isBroken == brokenButtons.end()) {
-				usableButtons.push_back(i);
-				rusableButtons.push_back(i);
-			}
-		}
 
-		int cost1 = getABS(targetChannel, curChannel);
+		
+		for (int button = 0; button <= 9; button++) 
+			if (isInbrokenButtons(button,brokenButtons) == false)
+				usableButtons.push_back(button);
+		
 
 
 		sort(usableButtons.begin(), usableButtons.end());
-		sort(rusableButtons.rbegin(), rusableButtons.rend());
 
 
-		bool flag = true;
-		int target = targetChannel;
-		while(target){
-			set<int>::iterator isBroken = brokenButtons.find(target % 10);
-			if (isBroken != brokenButtons.end()) {
-				flag = false;
-				break;
-			}
-			target = target / 10;
-		}
+		getCost1(targetChannel);
+		getCost2(targetChannel, usableButtons);
+		
 
-		if (targetChannel && flag) {
-				cost2 = getLength(targetChannel);
-		}
-		else if (usableButtons.size() != 0) {
-			getCost("", to_string(targetChannel), usableButtons);
-			getCostLonger(0, targetChannel, usableButtons);
-			getCostShorter(0, targetChannel, rusableButtons);
-		}
-		cout << (cost1 < cost2 ? cost1 : cost2);
-		cost2 = 500001;
-
-	} while (test);
+		cout << (cost1 < cost2 ? cost1 : cost2) << endl;
 
 }
