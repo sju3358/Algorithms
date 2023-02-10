@@ -13,8 +13,7 @@ int main(void) {
 
 	
 	arr[1] = 0;
-	for (int i = 2; i < 4; i++)
-		arr[i] = 1;
+	arr[2] = arr[3] = 1;
 	for (int i = 4; i <= 1000000; i++)
 		arr[i] = -1;
 
