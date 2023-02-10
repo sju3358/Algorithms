@@ -1,3 +1,4 @@
+    
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -6,10 +7,12 @@ using namespace std;
 
 unordered_map<string, int> pocketmon_names;
 unordered_map<int, string> pocketmon_values;
-string answer[100000];
-int cnt = 0;
+
 int main(void) {
 
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
 
 	int n; cin >> n;
 	int m; cin >> m;
@@ -28,15 +31,12 @@ int main(void) {
 		if (isdigit(input[0])) {
 			int num = stoi(input);
 			auto itr = pocketmon_values.find(num);
-			answer[cnt++] = itr->second;
+			cout << itr->second<< '\n';
 			
 		}
 		else {
 			auto itr = pocketmon_names.find(input);
-			answer[cnt++] = to_string(itr->second);
+			cout << itr->second << '\n';
 		}
 	}
-
-	for (int i = 0; i < cnt; i++)
-		cout << answer[i] << '\n';
 }
