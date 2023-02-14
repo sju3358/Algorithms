@@ -29,39 +29,39 @@ bool isMaxPrioirty(queue<Document> documents, int cnt) {
 
 
 int solution(vector<int> priorities, int location) {
+	
 	queue<Document> documents;
 
 	int cnt = 1;
 
-	for (int i = 0; i < priorities.size(); i++) {
-		Document document;
-		document.index = i;
-		document.prioirty = priorities[i];
-		documents.push(document);
-	}
+	for (int i = 0; i < priorities.size(); i++) 
+		documents.push({ i, priorities[i] });
+	
 
 	while (1) {
 
-		if (isMaxPrioirty(documents, cnt)) {
-			if (documents.front().index == location) {
-				return cnt;
-			}
-			else {
+		if(isMaxPrioirty(documents, cnt)) {
+			if (documents.front().index == location)
+				break;
+			else
+			{
 				documents.pop();
 				cnt++;
 			}
 		}
-		else {
+		else 
+		{
 			documents.push(documents.front());
 			documents.pop();
 		}
-
 	}
+
+	return cnt;
 }
 
 
 
-int main() {
-	cout << solution({2,1,3,2}, 2) << endl;
-	cout << solution({1,1,9,1,1,1}, 0) << endl;
-}
+// int main() {
+// 	cout << solution({2,1,3,2}, 2) << endl;
+// 	cout << solution({1,1,9,1,1,1}, 0) << endl;
+// }
