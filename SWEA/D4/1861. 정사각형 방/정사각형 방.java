@@ -6,7 +6,7 @@ class Node{
 	
 	int i;
 	int j;
-	int cost;
+	int cost; 
 	
 	public Node(int i, int j, int cost) {
 		this.i = i;
@@ -51,7 +51,7 @@ public class Solution {
 				if(isInBoundary(next_i, next_j, n)) {
 					
 					boolean flag1 = isVisit[next_i][next_j] == false;
-					boolean flag2 = Math.abs(rooms[node.i][node.j] - rooms[next_i][next_j]) == 1;
+					boolean flag2 = rooms[next_i][next_j] - rooms[node.i][node.j] == 1;
 					
 					if(flag1 && flag2) {
 						isVisit[next_i][next_j] = true;
