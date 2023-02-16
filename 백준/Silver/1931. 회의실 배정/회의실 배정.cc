@@ -61,13 +61,17 @@ int main(void) {
 
 	//cout << getMaxResevations();
 
-	int sum = 1;
-	
+	int cnt = 1;
+	int curEnd = reservations[0].end;
 
-	for (int i = 0; i < reservations.size(); i++) {
-		if (isPossible(reservations[i]))
-			selectedMeeting.push_back(reservations[i]);
+	for (int i = 1; i < reservations.size(); i++) {
+		if (reservations[i].start >= curEnd) {
+			cnt++;
+			curEnd = reservations[i].end;
+		}
 	}
 
-	cout << selectedMeeting.size();
+	//cout << selectedMeeting.size();
+
+	cout <<  cnt;
 }
