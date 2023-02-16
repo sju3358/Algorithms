@@ -11,13 +11,8 @@ typedef struct Meeting {
 	uint end;
 } Meeting;
 
-typedef struct Node {
-	int index;
-	int cost;
-};
-
 vector<Meeting> reservations;
-vector<Meeting> selectedMeeting;
+
 
 bool compare(Meeting a, Meeting b) {
 
@@ -27,21 +22,6 @@ bool compare(Meeting a, Meeting b) {
 		return a.end < b.end;
 }
 
-bool isPossible(Meeting a) {
-	
-	if (selectedMeeting.empty() == true)
-		return true;
-
-	if (a.end <= selectedMeeting[0].start || a.start >= selectedMeeting[selectedMeeting.size()-1].end)
-		return true;
-
-	for (int i = 0; i < selectedMeeting.size(); i++) {
-		if (selectedMeeting[i].end > a.start || a.end > selectedMeeting[i + 1].start)
-			return false;
-	}
-
-	return true;
-}
 
 int main(void) {
 
@@ -59,19 +39,16 @@ int main(void) {
 
 	sort(reservations.begin(), reservations.end(), compare);
 
-	//cout << getMaxResevations();
 
 	int cnt = 1;
 	int curEnd = reservations[0].end;
 
 	for (int i = 1; i < reservations.size(); i++) {
 		if (reservations[i].start >= curEnd) {
-			cnt++;
 			curEnd = reservations[i].end;
+			cnt++;
 		}
 	}
-
-	//cout << selectedMeeting.size();
 
 	cout <<  cnt;
 }
