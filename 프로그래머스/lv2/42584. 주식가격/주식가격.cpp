@@ -19,8 +19,7 @@ vector<int> solution(vector<int> prices) {
 	for (int i = 0; i < prices.size(); i++) {
 		
 		while (priceStack.empty() != true && priceStack.top().price > prices[i]) {
-			Price price = priceStack.top();
-			priceStack.pop();
+			Price price = priceStack.top(); priceStack.pop();
 			answer[price.index] = i - price.index;
 		}
 
@@ -28,11 +27,9 @@ vector<int> solution(vector<int> prices) {
 	}
 
 	if (priceStack.size() > 2) {
-		Price pivot = priceStack.top();
-		priceStack.pop();
+		Price pivot = priceStack.top(); priceStack.pop();
 		while (priceStack.empty() != true) {
-			Price price = priceStack.top();
-			priceStack.pop();
+			Price price = priceStack.top(); priceStack.pop();
 			answer[price.index] = pivot.index - price.index;
 		}
 	}
@@ -41,9 +38,8 @@ vector<int> solution(vector<int> prices) {
 	return answer;
 }
 
-int main() {
-	for (int result : solution({ 1,2,3,2,3 }))
-		cout << result << " ";
+// int main() {
+// 	for (int result : solution({ 1,2,3,2,3 }))
+// 		cout << result << " ";
 	
-}
-
+// }
