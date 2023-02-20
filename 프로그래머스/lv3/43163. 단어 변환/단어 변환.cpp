@@ -31,17 +31,12 @@ int solution(string begin, string target, vector<string> words) {
 	int minCount = INTEGER_MAX_VALUE;
 
 	queue<Word> nextWord;
-
 	vector<bool> isVisit;
+	
 	for (int i = 0; i < words.size(); i++)
 		isVisit.push_back(false);
 
-	for (int i = 0; i < words.size(); i++) {
-		if (compareString(begin, words[i]) <= 1) {
-			nextWord.push({ words[i],1 });
-			isVisit[i] = true;
-		}
-	}
+	nextWord.push({ begin,0 });
 
 	bool isFind = false;
 	
@@ -68,7 +63,7 @@ int solution(string begin, string target, vector<string> words) {
 	return isFind == true ? minCount : 0;
 }
 
-// int main() {
+int main() {
 
-// 	solution("hit", "cog", { "hot","dot","dog","lot","log","cog" });
-// }
+	solution("hit", "cog", { "hot","dot","dog","lot","log","cog" });
+}
