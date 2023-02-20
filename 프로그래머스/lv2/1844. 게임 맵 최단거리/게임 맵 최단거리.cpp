@@ -40,17 +40,12 @@ int solution(vector<vector<int> > maps){
 	nextNode.push({ 0,0,1 });
 	isVisit[0][0] = true;
 
-
-	bool isArrived = false;
-
 	while (nextNode.empty() != true) {
 		Node curNode = nextNode.front(); nextNode.pop();
 
 		if (curNode.i == N - 1 && curNode.j == M - 1) {
 			if (minLength > curNode.length)
 				minLength = curNode.length;
-
-			isArrived = true;
 		}
 		else {
 			for (int i = 0; i < 4; i++) {
@@ -68,9 +63,10 @@ int solution(vector<vector<int> > maps){
 		}
 	}
 
-	return isArrived != false ? minLength : -1;
+	return isVisit[N-1][M-1] == true ? minLength : -1;
 }
 
-int main() {
 
-}
+// int main() {
+
+// }
