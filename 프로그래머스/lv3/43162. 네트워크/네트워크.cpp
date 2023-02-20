@@ -1,62 +1,53 @@
 #include <string>
 #include <vector>
 #include <queue>
-#include <sstream>
 #include <stdio.h>
 #include <iostream>
 
 
 using namespace std;
 
-bool isInBoundary(int x, int n)
-{
-    if(0 <= x && x < n)
-        return true;
-    else
-        return false;
-}
+vector<bool> isVisit;
 
+void bfs(int startIndex, vector<vector<int>> computers){
+	
+	queue<int> nextNode;
+	nextNode.push(startIndex);
+	isVisit[startIndex] = true;
 
-void bfs(int n, vector<vector<int>> computers, vector<bool> &isVisit, queue<int> &bfs_queue)
-{
-    if(bfs_queue.empty() == true)
-        return;
-    
+	while (nextNode.empty() != true) {
+		int curNode = nextNode.front(); nextNode.pop();
 
-    int node = bfs_queue.front();
-    isVisit[node] = true;
-    bfs_queue.pop();
-
-    for(int i = 0; i < n; i++){
-        if( i == node)
-            continue;
-        if(computers[node][i] == 1 && isVisit[i] == false){
-            bfs_queue.push(i);
-        }
-    }
-
-    bfs(n, computers, isVisit, bfs_queue);
+		for (int i = 0; i < computers.size(); i++) {
+			if (isVisit[i] == false && computers[curNode][i] == 1) {
+				isVisit[i] = true;
+				nextNode.push(i);
+			}
+		}
+	}
 }
 
 
 int solution(int n, vector<vector<int>> computers) {
-    int answer = 0;
-    
-    vector<bool> isVisit;
-    
-   //map 초기화
-    for(int i = 0; i<n ; i++){
-        isVisit.push_back(false);
-    }
+	int answer = 0;
+
+	//map 초기화
+	for (int i = 0; i < n; i++) {
+		isVisit.push_back(false);
+	}
 
 
-    for(int i = 0; i<n; i++){
-       if(isVisit[i] == false){
-        queue<int> bfs_queue;
-        bfs_queue.push(i);
-        bfs(n,computers,isVisit,bfs_queue);
-        answer++;
-       } 
-    }
-    return answer;
+	for (int i = 0; i < n; i++) {
+		if (isVisit[i] == false) {
+			bfs(i, computers);
+			answer++;
+		}
+	}
+	return answer;
+}
+
+int main() {
+	
+	cout << solution(3, { {1, 1, 0},{1, 1, 0},{0, 0, 1} });
+
 }
