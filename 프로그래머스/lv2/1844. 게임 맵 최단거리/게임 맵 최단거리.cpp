@@ -1,83 +1,76 @@
-#include <vector>
 #include <iostream>
-#include <stack>
+#include <vector>
 #include <queue>
-#include <algorithm>
-#include <string>
-#include <sstream>
+
+#define INTEGER_MAX_VALUE 2100000000
 
 using namespace std;
 
-bool isOutOfBound(int x, int y, vector<vector<int>> &maps, vector<vector<bool>> &isVisit) 
-{
-    int n = maps.size();
-    int m = maps[0].size();
-    if(0 <= x && x < n && 0 <= y && y < m){
-        if(isVisit[x][y] == false && maps[x][y] != 0){
-            return true;
-        }
-        else
-            return false;
-    }
-    else 
-        return false;
+typedef struct node {
+	int i;
+	int j;
+	int length;
+}Node;
+
+int dir_i[] = {0, 0, 1,-1};
+int dir_j[] = {1,-1, 0, 0};
+
+
+bool isInBoundary(int i, int j, int n, int m) {
+	return 0 <= i && i < n && 0 <= j && j < m;
 }
 
-int solution(vector<vector<int> > maps)
-{
-    int answer = 0;
-    vector<vector<bool>> isVisit;
-    vector<vector<int>> distance;
-    vector<int> costs;
-    queue<int> bfs;
+int solution(vector<vector<int> > maps){
 
-    //초기값 초기화
-    for(int i = 0; i<maps.size(); i++)
-    {
-        vector<bool> temp;
-        vector<int> temp2;
-        for(int j = 0; j < maps[0].size(); j++){
-            temp.push_back(false);
-            temp2.push_back(-1);
-            
-        }
-        isVisit.push_back(temp);
-        distance.push_back(temp2);
-    }
+	vector<vector<bool>> isVisit;
 
-    vector<int> dx = {1,-1,0,0};
-    vector<int> dy = {0,0,1,-1};
-    distance[0][0] = 1;
-    
-    bfs.push(0);
-    bfs.push(0);
-    
-    int n = maps.size()-1;
-    int m = maps[0].size()-1;
-    
-    while(bfs.empty() != true){
-        int cur_x = bfs.front(); bfs.pop();
-        int cur_y = bfs.front(); bfs.pop();
-        
-        if(cur_x == n && cur_y == m)
-            break;
-        
-        isVisit[cur_x][cur_y] = true;
-        
-        for(int i = 0; i< 4; i++){
-            int next_x = cur_x+ dx[i];
-            int next_y = cur_y+ dy[i];
-            if(isOutOfBound(next_x,next_y,maps,isVisit)){
-                bfs.push(next_x);
-                bfs.push(next_y);
-                isVisit[next_x][next_y] = true;
-                if(distance[next_x][next_y] == -1)
-                    distance[next_x][next_y] = distance[cur_x][cur_y] + 1;
-            }
-        }
-    }
+	int N = maps.size();
+	int M = maps[0].size();
+	int minLength = INTEGER_MAX_VALUE;
 
-    
-    answer = distance[n][m];
-    return answer;
+	for (int i = 0; i < N; i++) {
+		vector<bool> temp;
+		for (int j = 0; j < M; j++) {
+			temp.push_back(false);
+		}
+		isVisit.push_back(temp);
+	}
+
+	queue<Node> nextNode;
+	nextNode.push({ 0,0,1 });
+	isVisit[0][0] = true;
+
+
+	bool isArrived = false;
+
+	while (nextNode.empty() != true) {
+		Node curNode = nextNode.front(); nextNode.pop();
+
+		if (curNode.i == N - 1 && curNode.j == M - 1) {
+			if (minLength > curNode.length)
+				minLength = curNode.length;
+
+			isArrived = true;
+		}
+		else {
+			for (int i = 0; i < 4; i++) {
+				int nextI = curNode.i + dir_i[i];
+				int nextJ = curNode.j + dir_j[i];
+
+				if (isInBoundary(nextI, nextJ, N, M)) {
+					if (maps[nextI][nextJ] == 1 && isVisit[nextI][nextJ] == false) {
+						isVisit[nextI][nextJ] = true;
+						nextNode.push({ nextI, nextJ, curNode.length + 1 });
+					}
+				}
+
+			}
+		}
+	}
+
+	return isArrived != false ? minLength : -1;
+}
+
+int main() {
+
 }
