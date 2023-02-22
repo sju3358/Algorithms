@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
 import java.util.StringTokenizer;
 
 
@@ -77,19 +74,8 @@ public class Main {
 			}
 		}
 		
-//		int maxAnswer = 0;
-//		for(int j = 0; j < m; j++) {
-//			int sum = 0;
-//			for(int i = 0; i < n; i++) 
-//				if(map[i][j] == 'x')
-//					sum++;
-//			if(maxAnswer < sum)
-//				maxAnswer = sum;
-//		}
-		
 		for(int i = 0; i <n; i++) {
 			isArrived = false;
-//			if(answer < n - maxAnswer)
 				dfs(i,0);
 		}
 		
