@@ -20,6 +20,7 @@ public class Main {
 	
 	static int maxLength = -1;
 	static int[][] dir = {{0,1},{0,-1},{1,0},{-1,0}};
+	static boolean flag = true;
 	
 	static boolean[] visited = new boolean[26];
 	static class Node{
@@ -41,7 +42,8 @@ public class Main {
 	public static void dfs(Node node) {
 			
 			
-			boolean possibleToMove = false;
+			if(maxLength < node.length)
+				maxLength = node.length;
 			
 			for(int i = 0; i < 4; i++) {
 				int nextI = node.i + dir[i][0];
@@ -50,17 +52,13 @@ public class Main {
 				if(isInBoundary(nextI,nextJ) == true) {
 					if(visited[map[nextI][nextJ] - 'A'] != true) {
 						visited[map[nextI][nextJ] - 'A'] = true;
-						possibleToMove = true;
 						dfs(new Node(nextI, nextJ,node.length+1));
 						visited[map[nextI][nextJ] - 'A'] = false;
 					}
 				}
 			}
 			
-			if(possibleToMove == false) {
-				if(maxLength < node.length)
-					maxLength = node.length;
-			}
+			
 		
 	}
 	
