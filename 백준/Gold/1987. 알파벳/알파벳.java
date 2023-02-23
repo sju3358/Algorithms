@@ -20,39 +20,28 @@ public class Main {
 	
 	static int maxLength = -1;
 	static int[][] dir = {{0,1},{0,-1},{1,0},{-1,0}};
-	static boolean flag = true;
 	
 	static boolean[] visited = new boolean[26];
-	static class Node{
-		int i;
-		int j;
-		int length;
-		
-		public Node(int i, int j, int length) {
-			this.i = i;
-			this.j = j;
-			this.length = length;
-		}
-	}
+
 	
 	public static boolean isInBoundary(int i, int j) {
 		return 0 <= i && i < R && 0 <= j && j < C;
 	}
 	
-	public static void dfs(Node node) {
+	public static void dfs(int curI, int curJ, int curLength) {
 			
 			
-			if(maxLength < node.length)
-				maxLength = node.length;
+			if(maxLength < curLength)
+				maxLength = curLength;
 			
 			for(int i = 0; i < 4; i++) {
-				int nextI = node.i + dir[i][0];
-				int nextJ = node.j + dir[i][1];
+				int nextI = curI + dir[i][0];
+				int nextJ = curJ + dir[i][1];
 				
 				if(isInBoundary(nextI,nextJ) == true) {
 					if(visited[map[nextI][nextJ] - 'A'] != true) {
 						visited[map[nextI][nextJ] - 'A'] = true;
-						dfs(new Node(nextI, nextJ,node.length+1));
+						dfs(nextI, nextJ, curLength+1);
 						visited[map[nextI][nextJ] - 'A'] = false;
 					}
 				}
@@ -72,17 +61,11 @@ public class Main {
 		
 		map = new char[R][C];	
 		
-		for(int i = 0; i <R; i++) {
-			String input = br.readLine();
-			for(int j = 0; j < C; j++)
-				map[i][j] = input.charAt(j);
- 		}
-		
-		for(int i = 0; i <26; i++)
-			visited[i] = false;
+		for(int i = 0; i <R; i++) 
+			map[i] = br.readLine().toCharArray();
 		
 		visited[map[0][0] - 'A'] = true;
-		dfs(new Node(0,0,1));
+		dfs(0,0,1);
 		
 		System.out.println(maxLength);
 	}
