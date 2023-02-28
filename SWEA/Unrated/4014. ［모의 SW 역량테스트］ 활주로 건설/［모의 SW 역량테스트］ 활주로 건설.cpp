@@ -1,13 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-#include <math.h>
 #include <stack>
 using namespace std;
-
-
-
-int dir[] = {1,-1};
 
 bool isPossible(vector<int> map, int pivotLength){
 
@@ -46,8 +41,6 @@ bool isPossible(vector<int> map, int pivotLength){
 
             if (roads.size() < pivotLength)
                 return false;
-
-            int curHeight = roads.top();
 
             while (roads.size() > 1)
                 roads.pop();
