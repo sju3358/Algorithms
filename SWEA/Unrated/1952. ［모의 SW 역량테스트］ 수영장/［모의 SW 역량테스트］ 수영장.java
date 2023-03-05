@@ -49,15 +49,15 @@ public class Solution {
                     dp[i] = dp[i - 1] + costOf1Day * plan[i];
                     dp[i] = Math.min(dp[i], dp[i - 1] + costOf1Month);
                     dp[i] = Math.min(dp[i], costOf3Month);
-                    dp[i] = Math.min(dp[i], costOfYear);
                 }
                 else {
                     dp[i] = dp[i - 1] + costOf1Day * plan[i];
                     dp[i] = Math.min(dp[i], dp[i - 1] + costOf1Month);
                     dp[i] = Math.min(dp[i], dp[i - 3] + costOf3Month);
-                    dp[i] = Math.min(dp[i], costOfYear);
                 }
             }
+
+            dp[11] = Math.min(dp[11],costOfYear);
 
             System.out.println("#" + t + " " + dp[11]);
         }
