@@ -40,21 +40,17 @@ public class Solution {
             dp[0] = Math.min(costOf1Day*plan[0] , costOf1Month);
             dp[0] = Math.min(dp[0] , costOf1Month);
             dp[0] = Math.min(dp[0] , costOf3Month);
-            dp[0] = Math.min(dp[0] , costOfYear);
 
 
             for(int i = 1; i< 12; i++){
 
-                if(i < 3){
-                    dp[i] = dp[i - 1] + costOf1Day * plan[i];
-                    dp[i] = Math.min(dp[i], dp[i - 1] + costOf1Month);
+                dp[i] = dp[i - 1] + costOf1Day * plan[i];
+                dp[i] = Math.min(dp[i], dp[i - 1] + costOf1Month);
+
+                if(i < 3)
                     dp[i] = Math.min(dp[i], costOf3Month);
-                }
-                else {
-                    dp[i] = dp[i - 1] + costOf1Day * plan[i];
-                    dp[i] = Math.min(dp[i], dp[i - 1] + costOf1Month);
+                else
                     dp[i] = Math.min(dp[i], dp[i - 3] + costOf3Month);
-                }
             }
 
             dp[11] = Math.min(dp[11],costOfYear);
@@ -62,9 +58,4 @@ public class Solution {
             System.out.println("#" + t + " " + dp[11]);
         }
     }
-
-
-
-
-
 }
