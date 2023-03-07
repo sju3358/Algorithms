@@ -50,8 +50,8 @@ void makeMap(vector<vector<int>> rectangles) {
 	for (int index = 0; index < rectangles.size(); index++) {
 		vector<int> rectangle = rectangles[index];
 
-		for (int i = rectangle[1]*10; i <= rectangle[3]*10; i++)
-			for (int j = rectangle[0]*10; j <= rectangle[2]*10; j++)
+		for (int i = rectangle[1]*2; i <= rectangle[3]*2; i++)
+			for (int j = rectangle[0]*2; j <= rectangle[2]*2; j++)
 				map[i][j] = 1;
 	}
 }
@@ -67,10 +67,10 @@ int solution(vector<vector<int>> rectangle, int characterX, int characterY, int 
 
 	makeMap(rectangle);
 
-	int startX = characterY * 10;
-	int startY = characterX * 10;
-	int targetX = itemY * 10;
-	int targetY = itemX * 10;
+	int startX = characterY * 2;
+	int startY = characterX * 2;
+	int targetX = itemY * 2;
+	int targetY = itemX * 2;
 
 	queue<Node> nextNode;
 	nextNode.push({ startX, startY,0 });
@@ -85,7 +85,7 @@ int solution(vector<vector<int>> rectangle, int characterX, int characterY, int 
 
  		if (curNode.i == targetX && curNode.j == targetY)
 			if (minLength > curNode.distance)
-				minLength = curNode.distance/10;
+				minLength = curNode.distance/2;
 
 		for (int i = 0; i < 4; i++) {
 			int nextI = curNode.i + dir[i][0];
