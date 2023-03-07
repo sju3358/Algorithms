@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -9,42 +11,43 @@ public class Main {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st;
 	
+	
+	
 	public static void main(String args[]) throws IOException {
 
-
-		ArrayList<Integer> numbers = new ArrayList<>();
-
+		Queue<Integer> answers = new LinkedList<>(); 
+		
+		Queue<Integer> numbers = new LinkedList<>();
+		Queue<String> ops = new LinkedList<>();
+		
 		String input = br.readLine();
-
-		int sum = 0;
 		
+		st = new StringTokenizer(input,"+-");
 		
-		String number = "";
-		for (int i = 0; i < input.length(); i++){
+		while(st.hasMoreTokens())
+			numbers.add(Integer.parseInt(st.nextToken()));
 
-			if (input.charAt(i) == '-' || input.charAt(i) == '+') {
-				sum += Integer.parseInt(number);
-				number = "";
-
-				if (input.charAt(i) != '+') {
-					numbers.add(sum);
-					sum = 0;
-				}
+		for(int i = 0; i < input.length(); i++)
+			if(input.charAt(i) == '+' || input.charAt(i) == '-')
+				ops.add(input.charAt(i) + "");
+		
+		int answer = numbers.poll();
+		while(numbers.isEmpty() != true) {
+			String op = ops.poll();
+			
+			if(op.equals("+") == true)
+				answer += numbers.poll();
+			else {
+				answers.add(answer);
+				answer = numbers.poll();
 			}
-			else
-				number += input.charAt(i);
 		}
+		answers.add(answer);
+		
+		int result = answers.poll();
+		while(answers.isEmpty() != true)
+			result -= answers.poll();
 
-		sum += Integer.parseInt(number);
-		numbers.add(sum);
-
-		int answer = numbers.get(0);
-
-		if (numbers.size() > 1){
-			for (int i = 1; i < numbers.size(); i++)
-				answer = answer - numbers.get(i);
-		}
-
-		System.out.println(answer);
+		System.out.println(result);
 	}
 }
