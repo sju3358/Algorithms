@@ -1,6 +1,10 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 
@@ -10,19 +14,20 @@ public class Main {
 	static int[] dishes;
 	static int[] selectDishesCount;
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws IOException {
 		
-		Scanner scanner = new Scanner(System.in);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		N = scanner.nextInt();
-		D = scanner.nextInt();
-		K = scanner.nextInt();
-		C = scanner.nextInt();
+		StringTokenizer st = new StringTokenizer(br.readLine()," ");
+		N = Integer.parseInt(st.nextToken());
+		D = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		C = Integer.parseInt(st.nextToken());
 		
 		dishes = new int[N];
 		
 		for(int i = 0; i < N; i++)
-			dishes[i] = scanner.nextInt();
+			dishes[i] = Integer.parseInt(br.readLine().trim());
 		
 		selectDishesCount = new int[D+1];
 		selectDishesCount[C] = 1;
