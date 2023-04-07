@@ -5,7 +5,8 @@ import java.util.StringTokenizer;
 
 public class Main {
 	
-	
+	static int[][] map = new int[10][10];
+	static int numOfPaper[] = {5,5,5,5,5};
 	
 	static int minCnt = Integer.MAX_VALUE;
 	static boolean flag = false;
@@ -22,7 +23,7 @@ public class Main {
 		return true;
 	}
 	
-	public static boolean check(int start_i, int start_j, int size, int[][] map) {
+	public static boolean check(int start_i, int start_j, int size) {
 		
 		for(int i = start_i; i < start_i + size; i++) {
 			for(int j = start_j; j< start_j + size; j++) {
@@ -37,7 +38,7 @@ public class Main {
 		return true;
 	}
 	
-	public static int[][] paste(int start_i, int start_j, int size, int[][] map) {
+	public static int[][] paste(int start_i, int start_j, int size) {
 		for(int i = start_i; i < start_i + size; i++) {
 			for(int j = start_j; j< start_j + size; j++) {
 				map[i][j] = 0;
@@ -46,7 +47,7 @@ public class Main {
 		return map;
 	}
 	
-	public static int[][] takeOff(int start_i, int start_j, int size, int[][] map) {
+	public static int[][] takeOff(int start_i, int start_j, int size) {
 		for(int i = start_i; i < start_i + size; i++) {
 			for(int j = start_j; j< start_j + size; j++) {
 				map[i][j] = 1;
@@ -55,10 +56,13 @@ public class Main {
 		return map;
 	}
 
-	public static void solution(int i, int j, int[][] map, int numOfPaper[], int cnt) {
+	public static void solution(int i, int j, int cnt) {
+		
+		if(cnt >= minCnt)
+			return;
 		
 		if(j == 10) {
-			solution(i+1,0,map,numOfPaper,cnt);
+			solution(i+1,0,cnt);
 			return;
 		}
 		if(i == 10)
@@ -70,22 +74,22 @@ public class Main {
 		}
 		
 		if(map[i][j] == 0) {	
-			solution(i,j+1,map,numOfPaper,cnt);
+			solution(i,j+1,cnt);
 		}
 		else {
-			for(int k = 0; k < 5; k++) {
+			for(int k = 4; k >= 0; k--) {
 				
 				if(numOfPaper[k] == 0)
 					continue;
 				
-				if(check(i,j,k+1,map)) {
+				if(check(i,j,k+1)) {
 					
 					numOfPaper[k]--;
-					paste(i,j,k+1,map);
+					paste(i,j,k+1);
 					
-					solution(i,j,map,numOfPaper,cnt+1);
+					solution(i,j,cnt+1);
 					
-					takeOff(i,j,k+1,map);
+					takeOff(i,j,k+1);
 					numOfPaper[k]++;
 				}
 			}
@@ -97,10 +101,6 @@ public class Main {
 		StringTokenizer st;
 		
 		
-		int map[][] = new int[10][10];
-		int numOfPapers[] = {5,5,5,5,5};
-		
-		
 		for(int i = 0; i < 10; i++) {
 			st = new StringTokenizer(br.readLine()," ");
 			for(int j = 0; j < 10; j++) 
@@ -108,7 +108,7 @@ public class Main {
 		}
 		
 		
-		solution(0,0,map,numOfPapers,0);
+		solution(0,0,0);
 		
 		if(flag == true)
 			System.out.println(minCnt);
