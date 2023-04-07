@@ -67,12 +67,7 @@ public class Main {
 		}
 		if(i == 10)
 			return;
-		
-		if(isAnswer(map) == true) {
-			flag = true;
-			minCnt = Math.min(minCnt, cnt);
-		}
-		
+
 		if(map[i][j] == 0) {	
 			solution(i,j+1,cnt);
 		}
@@ -87,7 +82,11 @@ public class Main {
 					numOfPaper[k]--;
 					paste(i,j,k+1);
 					
-					solution(i,j,cnt+1);
+					if(isAnswer(map) == true) {
+						flag = true;
+						minCnt = Math.min(minCnt, cnt+1);
+					}else
+						solution(i,j,cnt+1);
 					
 					takeOff(i,j,k+1);
 					numOfPaper[k]++;
@@ -107,8 +106,11 @@ public class Main {
 				map[i][j] = Integer.parseInt(st.nextToken());
 		}
 		
-		
-		solution(0,0,0);
+		if(isAnswer(map) == true) {
+			flag = true;
+			minCnt = 0;
+		}else
+			solution(0,0,0);
 		
 		if(flag == true)
 			System.out.println(minCnt);
