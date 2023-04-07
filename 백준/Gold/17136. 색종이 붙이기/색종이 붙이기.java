@@ -57,6 +57,10 @@ public class Main {
 
 	public static void solution(int i, int j, int[][] map, int numOfPaper[], int cnt) {
 		
+		if(j == 10) {
+			solution(i+1,0,map,numOfPaper,cnt);
+			return;
+		}
 		if(i == 10)
 			return;
 		
@@ -66,14 +70,7 @@ public class Main {
 		}
 		
 		if(map[i][j] == 0) {	
-			
-			j = j + 1;
-			if(j == 10) {
-				i = i + 1;
-				j = 0;
-			}
-			
-			solution(i,j,map,numOfPaper,cnt);
+			solution(i,j+1,map,numOfPaper,cnt);
 		}
 		else {
 			for(int k = 0; k < 5; k++) {
