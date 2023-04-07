@@ -17,20 +17,16 @@ public class Main {
 		public Node(int i, int j) {
 			this(i,j,' ');
 		}
-		@Override
-		public String toString() {
-			return "Node [i=" + i + ", j=" + j + "]";
-		}
-		
-		
 	}
 	
-	
+	static Node[] princessList = new Node[7];
 	static char[][] map = new char[5][5];
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	
 	static int cnt = 0;
 	
-	static int debug = 0;
+	static int cntOfS = 0;
+	static int[][] testMap = new int[5][5];
 	
 	static int[][] dir = {{1,0},{-1,0},{0,1},{0,-1}};
 	
@@ -50,7 +46,8 @@ public class Main {
 		return 0 <= i && i < 5 && 0 <= j && j < 5;
 	}
 	
-	public static boolean check(int[][] map, int startI, int startJ) {
+	public static boolean check(int startI, int startJ) {
+		
 		int count = 0;
 		
 		boolean[][] visited = new boolean[5][5];
@@ -74,7 +71,7 @@ public class Main {
 				if(visited[nextI][nextJ] == true)
 					continue;
 				
-				if(map[nextI][nextJ] == 0)
+				if(testMap[nextI][nextJ] == 0)
 					continue;
 				
 				nextNode.add(new Node(nextI,nextJ));
@@ -90,54 +87,40 @@ public class Main {
 			return false;
 	}
 	
-	public static void getCombination(int size, Node[] princessList) {
+	public static void solution(int cur, int size) {
 		if(size == 7) {
-			int cntOfS = 0;
-			
-			debug++;
-			
-			for(int i = 0; i < princessList.length; i++)
-				if(princessList[i].region == 'S')
-					cntOfS++;
 			
 			if(cntOfS >= 4) {
 				
-				int[][] map = new int[5][5];
-				for(Node node : princessList)
-					map[node.i][node.j] = 1;
-				
-				if(check(map,princessList[0].i, princessList[0].j) == true)
+				if(check(princessList[0].i, princessList[0].j) == true)
 					cnt++;
 			}
 		}
 		else {
-			
-			int startK = -1;
-			
-			if(size > 0) {
-				Node node = princessList[size-1];
-				startK = 5*node.i + node.j;
-			}
-				
-			
-			for(int k = startK+1; k < 25; k++) {
+			for(int k = cur; k < 25; k++) {
 				int i = k/5;
 				int j = k%5;
+				
+				if(map[i][j] == 'S')
+					cntOfS++;
+				
+				testMap[i][j] = 1;
 				princessList[size] = new Node(i,j,map[i][j]);
-				getCombination(size+1,princessList);
+				solution(k+1,size+1);
+				
+				testMap[i][j] = 0;
+				
+				if(map[i][j] == 'S')
+					cntOfS--;
+				
+				
 			}
 		}
-	}
-	
-	public static void solution() {
 		
-		Node[] princessList = new Node[7];
-		getCombination(0,princessList);
 	}
-	
 	
 	public static void main(String args[]) {
-		solution();
+		solution(0,0);
 		System.out.println(cnt);
 	}
 }
