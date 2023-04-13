@@ -11,11 +11,7 @@ bool compare(string a, string b) {
     string targetA = a + b;
     string targetB = b + a;
 
-    for(int i = 0 ; i < targetA.length(); i++){
-        if(targetA[i] != targetB[i])
-            return targetA[i] > targetB[i];
-    }
-    return false;
+    return targetA > targetB;
 }
 
 
