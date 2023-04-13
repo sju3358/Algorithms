@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -25,7 +26,7 @@ public class Main {
 
 	private static int solution(){
 
-		Queue<ArrayList<Integer>> nextParty = new LinkedList<>();
+		Queue<ArrayList<Integer>> nextParty = new ArrayDeque<>();
 
 	    for(int i = 0; i < partys.length; i++)
 	        nextParty.add(partys[i]);
