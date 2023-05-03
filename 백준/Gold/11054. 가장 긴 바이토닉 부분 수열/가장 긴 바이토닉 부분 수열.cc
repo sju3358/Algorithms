@@ -22,7 +22,7 @@ int main(){
         int max_index = i;
 
         for(int j = 0; j < i; j++){
-            if(input[j] < input[i] && upDp[j] > max){
+            if(input[i] > input[j] && upDp[j] > max){
                 max = upDp[j];
                 max_index = j;
             }
