@@ -64,6 +64,12 @@ public class Main {
                     if(nextLength > minLength)
                         continue;;
 
+                        /*
+                            1. 벽을 깨본적이 있고, 현재위치가 벽이 아닐때.
+                            2. 벽을 깨본적이 없고,
+                                2-1 현재위치가 벽일때
+                                2-2 현재위치가 벽이 아닐때.
+                         */
                     if(nextBroken == true){
 
                         if(map[nextI][nextJ] == 0){
@@ -99,7 +105,6 @@ public class Main {
                 }
             }
         }
-
         if(isArrived == true){
             return minLength;
         }
