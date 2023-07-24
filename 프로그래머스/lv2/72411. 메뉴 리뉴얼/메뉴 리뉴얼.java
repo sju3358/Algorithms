@@ -1,13 +1,14 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 class Solution {
 
     private static boolean[][] orderInfos;
     private static ArrayList<String> menuList = new ArrayList<>();
-    private int maxCount = 0;
-    private Set<String> tempMenuList;
 
-    private char[] alpahbet = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+    private int maxCount = 0;
+    private List<String> tempMenuList;
 
     public boolean check(int[] combination, boolean[] orderInfo){
         for(int i = 0; i < combination.length; i++){
@@ -21,18 +22,14 @@ class Solution {
         if(curLength == combination.length){
             int count = 0;
 
-            for(int i = 0; i < orderInfos.length; i++){
+            for(int i = 0; i < combination.length; i++){
                 if(check(combination, orderInfos[i]) == true)
                     count++;
             }
 
-            if(count < 2)
-                return;
-
             String menu = "";
             for(int i = 0; i < combination.length; i++)
-                menu = menu + alpahbet[combination[i]];
-
+                menu = menu + ('A' + combination[i]);
 
             if(count > maxCount){
                 maxCount = count;
@@ -45,11 +42,11 @@ class Solution {
         } else {
             int curIndex;
             if(curLength != 0)
-                curIndex = combination[curLength-1]+1;
+                curIndex = combination[curLength-1];
             else
                 curIndex = 0;
 
-            for(int i = curIndex; i < 26; i++){
+            for(int i = curIndex+1; i < 24; i++){
                 combination[curLength] = i;
                 makeCombination(curLength+1, combination);
             }
@@ -58,7 +55,7 @@ class Solution {
 
     public String[] solution(String[] orders, int[] course) {
 
-        orderInfos = new boolean[orders.length][26];
+        orderInfos = new boolean[orders.length][24];
 
         for(int i = 0; i < orders.length; i++){
             String order = orders[i];
@@ -67,10 +64,9 @@ class Solution {
         }
 
         for(int i = 0; i < course.length; i++){
-            maxCount = 0;
             int N = course[i];
             int[] combination = new int[N];
-            tempMenuList = new HashSet<>();
+            tempMenuList = new ArrayList<>();
             makeCombination(0,combination);
 
             for(String menu : tempMenuList)
@@ -78,15 +74,13 @@ class Solution {
         }
 
         String[] answer = new String[menuList.size()];
-        menuList.toArray(answer);
-        Arrays.sort(answer);
-        return answer;
+        return menuList.toArray(answer);
     }
 
     public static void main(String args[]){
         System.out.println(Arrays.toString(new Solution().solution(
-                new String[]{"ABCDE", "AB", "CD", "ADE", "XYZ", "XYZ", "ACD"},
-                new int[]{2,3,5}
+                new String[]{"ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"},
+                new int[]{2,3,4}
         )));
     }
 }
