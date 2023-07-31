@@ -1,57 +1,93 @@
-import java.util.*;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 class Solution {
-	static int[][] dp = new int[151][151];
-	static int max_alp = 0;
-	static int max_cop = 0;
-	static int cnt = Integer.MAX_VALUE/2;
+
+
+	int[][] problems;
+
+	int answer = Integer.MAX_VALUE;
+
+	public boolean findAnySolvableProblemByAlp(int curAlp, boolean[] visited){
+		for(int i = 0; i < problems.length; i++){
+
+			if(visited[i] == true)
+				continue;;
+
+			if(problems[i][0] <= curAlp)
+				return true;
+		}
+		return false;
+	}
+
+	public boolean findAnySolvableProblemByCop(int curCop, boolean[] visited){
+		for(int i = 0; i < problems.length; i++){
+
+			if(visited[i] == true)
+				continue;;
+
+			if(problems[i][1] <= curCop)
+				return true;
+		}
+		return false;
+	}
+
+	public void dfs(int curAlp, int curCop, int curCost, int solvedCnt, boolean[] visited){
+
+		if(curCost > answer)
+			return;
+
+		if(solvedCnt == visited.length) {
+			answer = Math.min(answer, curCost);
+			return;
+		}
+
+		for(int i = 0; i < problems.length; i++){
+
+			if(visited[i] == true)
+				continue;
+
+			int alp_req = problems[i][0];
+			int cop_req = problems[i][1];
+			int alp_rwd = problems[i][2];
+			int cop_rwd = problems[i][3];
+			int cost = problems[i][4];
+
+			if(curAlp >= alp_req && curCop >= cop_req){
+				visited[i] = true;
+				dfs(curAlp + alp_rwd, curCop + cop_rwd, curCost + cost, solvedCnt+1, visited);
+				visited[i] = false;
+			}
+		}
+		for(int i = 0; i < problems.length; i++){
+
+		}
+		boolean flag1 = findAnySolvableProblemByAlp(curAlp,visited);
+		boolean flag2 = findAnySolvableProblemByCop(curCop,visited);
+
+		if(flag1 != true && flag2 != true){
+			dfs(curAlp+1,curCop+1,curCost+2,solvedCnt,visited);
+		} else {
+			if(flag1)
+				dfs(curAlp,curCop+1,curCost+1,solvedCnt,visited);
+			if(flag2)
+				dfs(curAlp+1,curCop,curCost+1,solvedCnt,visited);
+		}
+
+	}
 
 	public int solution(int alp, int cop, int[][] problems) {
-		for(int i = 0; i < problems.length; i++){
-			max_alp = Math.max(max_alp, problems[i][0]);
-			max_cop = Math.max(max_cop, problems[i][1]);
-		}
 
-		for(int[] a : dp){
-			Arrays.fill(a, Integer.MAX_VALUE/2);
-		}
+		this.problems = problems;
 
-		PriorityQueue<int[]> pq = new PriorityQueue<>((int[] a, int[] b) -> {return a[2] - b[2];});
-		pq.add(new int[]{alp, cop, 0});
-		dp[alp][cop] = 0;
+		boolean[] visited = new boolean[problems.length];
 
-		while(!pq.isEmpty()){
-			int[] cur = pq.poll();
-			if(cnt <= cur[2]) continue;
-			for(int i = 0; i < problems.length; i++){
-				
-				if(cur[0] >= problems[i][0] && cur[1] >= problems[i][1]){
-					int[] next = new int[]{cur[0]+problems[i][2], cur[1]+problems[i][3], cur[2]+problems[i][4]};
-					
-					if(next[0] >= max_alp && next[1] >= max_cop){
-						dp[max_alp][max_cop] = Math.min(dp[max_alp][max_cop], next[2]);
-						cnt = next[2];
-						continue;
-					}
-					if(next[0] >= max_alp) next[0] = max_alp;
-					if(next[1] >= max_cop) next[1] = max_cop;
+		dfs(alp,cop,0,0,visited);
 
-					if(dp[next[0]][next[1]] > next[2]){
-						dp[next[0]][next[1]] = next[2];
-						pq.add(next);
-					}
-				}
-			}
-			// 공부로 1 늘리기
-			if(cur[0] < max_alp && dp[cur[0]+1][cur[1]] > cur[2]+1){
-				dp[cur[0]+1][cur[1]] = cur[2] + 1;
-				pq.add(new int[]{cur[0]+1,cur[1],cur[2]+1});
-			}
-			if(cur[1] < max_cop && dp[cur[0]][cur[1]+1] > cur[2]+1){
-				dp[cur[0]][cur[1]+1] = cur[2]+1;
-				pq.add(new int[]{cur[0],cur[1]+1,cur[2]+1});
-			}
-		}
-		return dp[max_alp][max_cop];
+		return answer;
+	}
+
+	public static void main(String args[]){
+		new Solution().solution(10,10,new int[][]{{10,15,2,1,2},{20,20,3,3,4}});
 	}
 }
