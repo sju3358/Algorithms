@@ -29,7 +29,7 @@ class Solution {
 
 		while(sumOfQueueA != sumOfQueueB){
 
-			if(answer > (queue1.length + queue2.length) * 4)
+			if(answer > (queue1.length + queue2.length) * 2)
 				return -1;
 
 			if(sumOfQueueA > sumOfQueueB ){
