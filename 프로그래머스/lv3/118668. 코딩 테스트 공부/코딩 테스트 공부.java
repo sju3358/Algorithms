@@ -1,93 +1,95 @@
-import java.lang.reflect.Array;
-import java.util.Arrays;
+import java.util.*;
 
 class Solution {
+    public int solution(int alp, int cop, int[][] problems) {
+        List<Problem> problemList = new ArrayList<>();
+        int alpReqMax = 0;
+        int copReqMax = 0;
 
+        problemList.add(new Problem(0, 0, 1, 0, 1));
+        problemList.add(new Problem(0, 0, 0, 1, 1));
 
-	int[][] problems;
+        for (int i = 0; i < problems.length; i++) {
+            int[] problem = problems[i];
+            alpReqMax = Math.max(alpReqMax, problem[0]);
+            copReqMax = Math.max(copReqMax, problem[1]);
+            problemList.add(new Problem(problem[0], problem[1], problem[2], problem[3], problem[4]));
+        }
+        Collections.sort(problemList);
 
-	int answer = Integer.MAX_VALUE;
+        PriorityQueue<Power> pq = new PriorityQueue<>();
+        int[][] isVisited = new int[1000][1000];
+        for(int i = 0; i < 1000; i++) {
+            Arrays.fill(isVisited[i], Integer.MAX_VALUE);
+        }
 
-	public boolean findAnySolvableProblemByAlp(int curAlp, boolean[] visited){
-		for(int i = 0; i < problems.length; i++){
+        isVisited[alp][cop] = 0;
+        pq.add(new Power(alp, cop, 0));
 
-			if(visited[i] == true)
-				continue;;
+        int answer = 0;
+        while (!pq.isEmpty()) {
+            Power p = pq.poll();
+            int nowAlp = p.alp;
+            int nowCop = p.cop;
+            int time = p.time;
 
-			if(problems[i][0] <= curAlp)
-				return true;
-		}
-		return false;
-	}
+            if(isVisited[nowAlp][nowCop] < time) continue;
+            if (alpReqMax <= nowAlp && copReqMax <= nowCop) {
+                answer = time;
+                break;
+            }
 
-	public boolean findAnySolvableProblemByCop(int curCop, boolean[] visited){
-		for(int i = 0; i < problems.length; i++){
+            for (Problem pr : problemList) {
+                int alpReq = pr.alpReq;
+                int copReq = pr.copReq;
+                int nextAlp = nowAlp + pr.alpRwd;
+                int nextCop = nowCop + pr.copRwd;
+                int nextCost = time + pr.cost;
 
-			if(visited[i] == true)
-				continue;;
+                if (nowAlp >= alpReq && nowCop >= copReq && isVisited[nextAlp][nextCop] > nextCost) {
+                    isVisited[nextAlp][nextCop] = nextCost;
+                    pq.add(new Power(nextAlp, nextCop, nextCost));
+                }
+            }
+        }
 
-			if(problems[i][1] <= curCop)
-				return true;
-		}
-		return false;
-	}
+        return answer;
+    }
+}
+class Power implements Comparable<Power> {
+    int alp;
+    int cop;
+    int time;
 
-	public void dfs(int curAlp, int curCop, int curCost, int solvedCnt, boolean[] visited){
+    public Power(int alp, int cop, int time) {
+        this.alp = alp;
+        this.cop = cop;
+        this.time = time;
+    }
 
-		if(curCost > answer)
-			return;
+    @Override
+    public int compareTo(Power p) {
+        return Integer.compare(this.time, p.time);
+    }
+}
 
-		if(solvedCnt == visited.length) {
-			answer = Math.min(answer, curCost);
-			return;
-		}
+class Problem implements Comparable<Problem> {
+    int alpReq;
+    int copReq;
+    int alpRwd;
+    int copRwd;
+    int cost;
 
-		for(int i = 0; i < problems.length; i++){
+    public Problem(int alpReq, int copReq, int alpRwd, int copRwd, int cost) {
+        this.alpReq = alpReq;
+        this.copReq = copReq;
+        this.alpRwd = alpRwd;
+        this.copRwd = copRwd;
+        this.cost = cost;
+    }
 
-			if(visited[i] == true)
-				continue;
-
-			int alp_req = problems[i][0];
-			int cop_req = problems[i][1];
-			int alp_rwd = problems[i][2];
-			int cop_rwd = problems[i][3];
-			int cost = problems[i][4];
-
-			if(curAlp >= alp_req && curCop >= cop_req){
-				visited[i] = true;
-				dfs(curAlp + alp_rwd, curCop + cop_rwd, curCost + cost, solvedCnt+1, visited);
-				visited[i] = false;
-			}
-		}
-		for(int i = 0; i < problems.length; i++){
-
-		}
-		boolean flag1 = findAnySolvableProblemByAlp(curAlp,visited);
-		boolean flag2 = findAnySolvableProblemByCop(curCop,visited);
-
-		if(flag1 != true && flag2 != true){
-			dfs(curAlp+1,curCop+1,curCost+2,solvedCnt,visited);
-		} else {
-			if(flag1)
-				dfs(curAlp,curCop+1,curCost+1,solvedCnt,visited);
-			if(flag2)
-				dfs(curAlp+1,curCop,curCost+1,solvedCnt,visited);
-		}
-
-	}
-
-	public int solution(int alp, int cop, int[][] problems) {
-
-		this.problems = problems;
-
-		boolean[] visited = new boolean[problems.length];
-
-		dfs(alp,cop,0,0,visited);
-
-		return answer;
-	}
-
-	public static void main(String args[]){
-		new Solution().solution(10,10,new int[][]{{10,15,2,1,2},{20,20,3,3,4}});
-	}
+    @Override
+    public int compareTo(Problem p) {
+        return Integer.compare(this.cost, p.cost);
+    }
 }
