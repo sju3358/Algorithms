@@ -1,95 +1,96 @@
-import java.util.*;
+    import java.util.*;
 
-class Solution {
-    public int solution(int alp, int cop, int[][] problems) {
-        List<Problem> problemList = new ArrayList<>();
-        int alpReqMax = 0;
-        int copReqMax = 0;
+    class Solution {
+        int[][] dp = new int[151][151];
+        int maxAlp = 0;
+        int maxCop = 0;
 
-        problemList.add(new Problem(0, 0, 1, 0, 1));
-        problemList.add(new Problem(0, 0, 0, 1, 1));
+        private class Node{
+            int curAlp;
+            int curCop;
+            int curCost;
 
-        for (int i = 0; i < problems.length; i++) {
-            int[] problem = problems[i];
-            alpReqMax = Math.max(alpReqMax, problem[0]);
-            copReqMax = Math.max(copReqMax, problem[1]);
-            problemList.add(new Problem(problem[0], problem[1], problem[2], problem[3], problem[4]));
-        }
-        Collections.sort(problemList);
-
-        PriorityQueue<Power> pq = new PriorityQueue<>();
-        int[][] isVisited = new int[1000][1000];
-        for(int i = 0; i < 1000; i++) {
-            Arrays.fill(isVisited[i], Integer.MAX_VALUE);
+            public Node(int curAlp, int curCop, int curCost){
+                this.curAlp = curAlp;
+                this.curCop = curCop;
+                this.curCost = curCost;
+            }
         }
 
-        isVisited[alp][cop] = 0;
-        pq.add(new Power(alp, cop, 0));
+        public int solution(int alp, int cop, int[][] problems) {
 
-        int answer = 0;
-        while (!pq.isEmpty()) {
-            Power p = pq.poll();
-            int nowAlp = p.alp;
-            int nowCop = p.cop;
-            int time = p.time;
 
-            if(isVisited[nowAlp][nowCop] < time) continue;
-            if (alpReqMax <= nowAlp && copReqMax <= nowCop) {
-                answer = time;
-                break;
+            for(int i = 0; i < problems.length; i++){
+                maxAlp = Math.max(maxAlp, problems[i][0]);
+                maxCop = Math.max(maxCop, problems[i][1]);
             }
 
-            for (Problem pr : problemList) {
-                int alpReq = pr.alpReq;
-                int copReq = pr.copReq;
-                int nextAlp = nowAlp + pr.alpRwd;
-                int nextCop = nowCop + pr.copRwd;
-                int nextCost = time + pr.cost;
 
-                if (nowAlp >= alpReq && nowCop >= copReq && isVisited[nextAlp][nextCop] > nextCost) {
-                    isVisited[nextAlp][nextCop] = nextCost;
-                    pq.add(new Power(nextAlp, nextCop, nextCost));
+            for(int i = 0; i <= 150; i++)
+                for(int j = 0; j <= 150; j++)
+                    dp[i][j] = Integer.MAX_VALUE;
+
+            for(int i = 0; i <= alp; i++)
+                for(int j = 0; j <= cop; j++)
+                    dp[i][j] = 0;
+
+            Queue<Node> queue = new LinkedList<>();
+            queue.add(new Node(alp,cop,0));
+
+            while(queue.isEmpty() != true){
+
+                Node curNode = queue.poll();
+
+                int curAlp = curNode.curAlp;
+                int curCop = curNode.curCop;
+                int curCost = curNode.curCost;
+
+                if(curAlp == maxAlp && curCop == maxCop){
+                    dp[curAlp][curCop] = Math.min(dp[curAlp][curCop],curCost);
+                } else {
+
+                    for (int i = 0; i < problems.length; i++) {
+
+                        int alp_req = problems[i][0];
+                        int cop_req = problems[i][1];
+                        int alp_rwd = problems[i][2];
+                        int cop_rwd = problems[i][3];
+                        int cost = problems[i][4];
+
+                        if (curAlp >= alp_req && curCop >= cop_req) {
+
+                            int nextAlp = curAlp + alp_rwd;
+                            int nextCop = curCop + cop_rwd;
+
+                            if (nextAlp > maxAlp)
+                                nextAlp = maxAlp;
+
+                            if (nextCop > maxCop)
+                                nextCop = maxCop;
+
+                            if (dp[nextAlp][nextCop] > curCost + cost) {
+                                dp[nextAlp][nextCop] = curCost + cost;
+                                queue.add(new Node(nextAlp, nextCop, curCost + cost));
+                            }
+                        }
+                    }
+
+                    if (curAlp < maxAlp && dp[curAlp + 1][curCop] > curCost + 1) {
+                        dp[curAlp + 1][curCop] = curCost + 1;
+                        queue.add(new Node(curAlp + 1, curCop, curCost + 1));
+                    }
+                    if (curCop < maxCop && dp[curAlp][curCop + 1] > curCost + 1) {
+                        dp[curAlp][curCop + 1] = curCost + 1;
+                        queue.add(new Node(curAlp, curCop + 1, curCost + 1));
+                    }
                 }
             }
+
+            return dp[maxAlp][maxCop];
+
         }
 
-        return answer;
+        public static void main(String args[]){
+            new Solution().solution(2, 0,new int[][]{{1,1,0,0,0}});
+        }
     }
-}
-class Power implements Comparable<Power> {
-    int alp;
-    int cop;
-    int time;
-
-    public Power(int alp, int cop, int time) {
-        this.alp = alp;
-        this.cop = cop;
-        this.time = time;
-    }
-
-    @Override
-    public int compareTo(Power p) {
-        return Integer.compare(this.time, p.time);
-    }
-}
-
-class Problem implements Comparable<Problem> {
-    int alpReq;
-    int copReq;
-    int alpRwd;
-    int copRwd;
-    int cost;
-
-    public Problem(int alpReq, int copReq, int alpRwd, int copRwd, int cost) {
-        this.alpReq = alpReq;
-        this.copReq = copReq;
-        this.alpRwd = alpRwd;
-        this.copRwd = copRwd;
-        this.cost = cost;
-    }
-
-    @Override
-    public int compareTo(Problem p) {
-        return Integer.compare(this.cost, p.cost);
-    }
-}
