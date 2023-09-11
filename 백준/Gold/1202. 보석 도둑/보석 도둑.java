@@ -57,7 +57,12 @@ public class Main {
 				bagsCount.put(bag,1);
 		}
 
-		Arrays.sort(jewelries,(jewelry1, jewelry2) -> jewelry2.value - jewelry1.value);
+		Arrays.sort(jewelries,(jewelry1, jewelry2) -> {
+			if(jewelry1.value == jewelry2.value)
+				return jewelry1.weight - jewelry2.weight;
+			else
+				return jewelry2.value - jewelry1.value;
+		});
 
 		Long maxValue = 0L;
 
