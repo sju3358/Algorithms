@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 
@@ -20,9 +21,9 @@ public class Main {
 		}
 	}
 
-	private static Jewelry[] jewelries;
 	private static TreeSet<Integer> bags;
 	private static HashMap<Integer, Integer> bagsCount;
+	private static PriorityQueue<Jewelry> jewelries;
 
 	public static void main(String args[]) throws IOException {
 
@@ -33,7 +34,12 @@ public class Main {
 		int N = Integer.parseInt(st.nextToken());
 		int K = Integer.parseInt(st.nextToken());
 
-		jewelries = new Jewelry[N];
+		jewelries = new PriorityQueue<>((jewelry1, jewelry2) -> {
+			if(jewelry1.value == jewelry2.value)
+				return jewelry1.weight - jewelry2.weight;
+			else
+				return jewelry2.value - jewelry1.value;
+		});
 		bags = new TreeSet<>();
 		bagsCount = new HashMap<>();
 
@@ -44,7 +50,7 @@ public class Main {
 			int weight = Integer.parseInt(st.nextToken());
 			int value = Integer.parseInt(st.nextToken());
 
-			jewelries[i] = new Jewelry(weight,value);
+			jewelries.add(new Jewelry(weight,value));
 		}
 
 		for(int i = 0; i < K; i++){
@@ -57,21 +63,15 @@ public class Main {
 				bagsCount.put(bag,1);
 		}
 
-		Arrays.sort(jewelries,(jewelry1, jewelry2) -> {
-			if(jewelry1.value == jewelry2.value)
-				return jewelry1.weight - jewelry2.weight;
-			else
-				return jewelry2.value - jewelry1.value;
-		});
-
 		Long maxValue = 0L;
 
-		for(int i = 0; i < jewelries.length; i++){
+		while(jewelries.isEmpty() != true){
 
-			Integer upperBound = bags.ceiling(jewelries[i].weight);
+			Jewelry jewelry = jewelries.poll();
+			Integer upperBound = bags.ceiling(jewelry.weight);
 
 			if(upperBound != null){
-				maxValue += jewelries[i].value;
+				maxValue += jewelry.value;
 
 				bagsCount.put(upperBound, bagsCount.get(upperBound) - 1);
 				if(bagsCount.get(upperBound) == 0){
