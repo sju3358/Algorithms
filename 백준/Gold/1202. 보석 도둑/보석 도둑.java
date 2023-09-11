@@ -25,6 +25,31 @@ public class Main {
 	private static HashMap<Integer, Integer> bagsCount;
 	private static PriorityQueue<Jewelry> jewelries;
 
+	private static Long getMaxValue(){
+
+		Long maxValue = 0L;
+
+		while(jewelries.isEmpty() != true){
+
+			Jewelry jewelry = jewelries.poll();
+
+			Integer minOfPossibleBag = bags.ceiling(jewelry.weight);
+
+			if(minOfPossibleBag != null){
+				maxValue += jewelry.value;
+
+				bagsCount.put(minOfPossibleBag, bagsCount.get(minOfPossibleBag) - 1);
+				if(bagsCount.get(minOfPossibleBag) == 0){
+					bags.remove(minOfPossibleBag);
+					bagsCount.remove(minOfPossibleBag);
+				}
+
+			}
+		}
+
+		return maxValue;
+	}
+
 	public static void main(String args[]) throws IOException {
 
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -63,25 +88,8 @@ public class Main {
 				bagsCount.put(bag,1);
 		}
 
-		Long maxValue = 0L;
 
-		while(jewelries.isEmpty() != true){
 
-			Jewelry jewelry = jewelries.poll();
-			Integer upperBound = bags.ceiling(jewelry.weight);
-
-			if(upperBound != null){
-				maxValue += jewelry.value;
-
-				bagsCount.put(upperBound, bagsCount.get(upperBound) - 1);
-				if(bagsCount.get(upperBound) == 0){
-					bags.remove(upperBound);
-					bagsCount.remove(upperBound);
-				}
-
-			}
-		}
-
-		System.out.println(maxValue);
+		System.out.println(getMaxValue());
 	}
 }
