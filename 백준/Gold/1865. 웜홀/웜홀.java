@@ -17,8 +17,10 @@ public class Main {
 
         map = new int[sizeOfMap][sizeOfMap];
 
-        for(int i = 0; i < sizeOfMap; i++)
+        for(int i = 0; i < sizeOfMap; i++){
             Arrays.fill(map[i], 5000001);
+            map[i][i] = 0;
+        }
     }
 
 
