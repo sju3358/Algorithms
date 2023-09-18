@@ -60,21 +60,29 @@ class Solution {
         }
     }
 
+    private boolean isElementOfSet(int set, int index){
+        if((set & 1 << index) != 0)
+            return true;
+        else
+            return false;
+    }
+
     private ArrayList<ArrayList<Integer>> getPowerSet(ArrayList<Integer> elements){
 
         ArrayList<ArrayList<Integer>> powerSet = new ArrayList<>();
 
-        for(int setBit = 1; setBit < (int)Math.pow(2,elements.size()); setBit++){
+        for(int setBit = 1; setBit <= Math.pow(2,elements.size()); setBit++){
 
-            ArrayList<Integer> subSet = new ArrayList<>();
+            ArrayList<Integer> set = new ArrayList<>();
 
             for(int index = 0; index < elements.size(); index++){
 
-                if((setBit & (1 << index)) != 0){
-                    subSet.add(elements.get(index));
-                }
+                if(isElementOfSet(setBit, elements.get(index)))
+                    set.add(elements.get(index));
+
             }
-            powerSet.add(subSet);
+            if(set.size() > 0)
+                powerSet.add(set);
         }
 
         return powerSet;
@@ -99,10 +107,9 @@ class Solution {
             return false;
     }
 
-    private boolean isContainSubsetOfCandidateKey(ArrayList<ArrayList<Integer>> powerSetOfCandidateKey){
-
-        for(ArrayList<Integer> subSetOfCandidateKey : powerSetOfCandidateKey)
-            if (candidateKeys.contain(subSetOfCandidateKey))
+    private boolean isContainSubsetOfCandidateKey(ArrayList<ArrayList<Integer>> powerSetOfKey){
+        for(ArrayList<Integer> subSetOfKey : powerSetOfKey)
+            if(candidateKeys.contain(subSetOfKey))
                 return true;
         return false;
     }
@@ -112,16 +119,18 @@ class Solution {
         for(int i = 0; i < relation[0].length; i++)
             targetColumns.add(i);
 
-        ArrayList<ArrayList<Integer>> powerSetOfRelation = getPowerSet(targetColumns);
+        ArrayList<ArrayList<Integer>> powerSet = getPowerSet(targetColumns);
 
-        for(int i = 0; i < powerSetOfRelation.size(); i++){
+        for(int i = 0; i < powerSet.size(); i++){
 
-            ArrayList<Integer> candidateKey = powerSetOfRelation.get(i);
+            ArrayList<Integer> set = powerSet.get(i);
 
-            if(isCandidateKey(candidateKey,relation) == true){
+            if(isCandidateKey(set,relation) == true){
 
-                if(isContainSubsetOfCandidateKey(getPowerSet(candidateKey)) != true)
-                    candidateKeys.add(candidateKey);
+                ArrayList<ArrayList<Integer>> powerSetOfKey = getPowerSet(set);
+
+                if(isContainSubsetOfCandidateKey(powerSetOfKey) != true)
+                    candidateKeys.add(set);
             }
 
         }
@@ -151,7 +160,7 @@ class Solution {
                 {"a","1","aaa","c","ng"},
                 {"b","1","bbb","c","g"},
                 {"c","1","aaa","d","ng"},
-                {"d","2","bbb","d","ng"}
+                {"d","1","bbb","d","ng"}
             }
         ));
     }
