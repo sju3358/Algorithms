@@ -120,7 +120,10 @@
                           return true;
 
                       //양쪽 끝에 보가 있을때
-                      return this.buildingList.contains(new Building(x-1,y,1)) && this.buildingList.contains(new Building(x+1,y,1));
+                      if(this.buildingList.contains(new Building(x-1,y,1)) && this.buildingList.contains(new Building(x+1,y,1)))
+                          return true;
+
+                      return false;
               }
 
               return false;
