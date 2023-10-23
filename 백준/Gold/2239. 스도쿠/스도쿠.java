@@ -95,6 +95,8 @@ public class Main {
 
 			for (int nextDigit = 1; nextDigit <= 9; nextDigit++) {
 
+				if(isAnswerFind == true)
+					break;
 				if (visitedOfSquare[squareIndex][nextDigit-1] == true)
 					continue;
 				if (visitedOfRow[i][nextDigit-1] == true)
